@@ -33,27 +33,24 @@ impl<'a> RNA<'a> {
 
          // converts "UAAUAGUGA" -> ["UAA", "UAG", "UGA"]
         for i in 0..self.string.graphemes(true).count() / 3 {
-            println!("{}", self.string[i * 3..i * 3 + 3].to_string());
             codons.push(self.string[i * 3..i * 3 + 3].to_string());
         }
         let c_mapper = RNA::codon_mapper();
 
-            'outer: for codon in &codons {
-                for codon_options in c_mapper.keys()  {
-                    if codon_options.contains(&codon.as_str()) {
-                        if c_mapper.get(codon_options) == Some(&"STOP") {
-                            break 'outer;
-                        } else {
-                            if let Some(protein) = c_mapper.get(codon_options) {
-                                // println!("codon: {}, codon_options: {:?}", codon, codon_options);
-                                // println!("value: {}, options: {:?}", val, codon_options);
-                                proteins.push(protein.to_string());
-                            } 
-                        }
-                        
-                    } 
-                }
+        'outer: for codon in &codons {
+            for codon_options in c_mapper.keys()  {
+                if codon_options.contains(&codon.as_str()) {
+                    if c_mapper.get(codon_options) == Some(&"STOP") {
+                        break 'outer;
+                    } else {
+                        if let Some(protein) = c_mapper.get(codon_options) {
+                            proteins.push(protein.to_string());
+                        } 
+                    }
+                    
+                } 
             }
+        }
         
         proteins
         
